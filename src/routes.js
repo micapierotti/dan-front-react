@@ -9,6 +9,7 @@ import DashboardApp from './pages/DashboardApp';
 import Products from './pages/Products';
 import Blog from './pages/Blog';
 import Client from './pages/Client';
+import NewClient from './pages/NewClient';
 import NotFound from './pages/Page404';
 import Employee from './pages/Employee';
 
@@ -23,6 +24,7 @@ export default function Router() {
         { element: <Navigate to="/dashboard/app" replace /> },
         { path: 'app', element: <DashboardApp /> },
         { path: 'client', element: <Client /> },
+        { path: 'client/new', element: <NewClient /> },
         { path: 'employee', element: <Employee /> },
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> }

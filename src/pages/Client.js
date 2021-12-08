@@ -139,7 +139,7 @@ export default function Client() {
           <Button
             variant="contained"
             component={RouterLink}
-            to="#"
+            to="/dashboard/client/new"
             startIcon={<Icon icon={plusFill} />}
           >
             Nuevo cliente
