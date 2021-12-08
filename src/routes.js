@@ -11,6 +11,8 @@ import Blog from './pages/Blog';
 import User from './pages/User';
 import NotFound from './pages/Page404';
 import Employee from './pages/Employee';
+import Obras from './pages/Obras';
+import NuevaObra from './pages/NuevaObra';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +26,8 @@ export default function Router() {
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'employee', element: <Employee /> },
+        { path: 'obras', element: <Obras /> },
+        { path: '/dashboard/obras/nuevaObra', element: <NuevaObra /> },
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> }
       ]

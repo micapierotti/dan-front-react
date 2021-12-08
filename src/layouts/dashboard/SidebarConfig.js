@@ -38,7 +38,7 @@ const sidebarConfig = [
   },
   {
     title: 'Obras',
-    path: '/dashboard/blog',
+    path: '/dashboard/obras',
     icon: getIcon(settings2Fill)
   }
 ];
