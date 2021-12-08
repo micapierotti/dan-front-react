@@ -8,7 +8,7 @@ import Register from './pages/Register';
 import DashboardApp from './pages/DashboardApp';
 import Products from './pages/Products';
 import Blog from './pages/Blog';
-import User from './pages/User';
+import Client from './pages/Client';
 import NotFound from './pages/Page404';
 import Employee from './pages/Employee';
 
@@ -22,7 +22,7 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard/app" replace /> },
         { path: 'app', element: <DashboardApp /> },
-        { path: 'user', element: <User /> },
+        { path: 'client', element: <Client /> },
         { path: 'employee', element: <Employee /> },
         { path: 'products', element: <Products /> },
         { path: 'blog', element: <Blog /> }

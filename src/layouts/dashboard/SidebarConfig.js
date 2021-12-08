@@ -18,7 +18,7 @@ const sidebarConfig = [
   },
   {
     title: 'Clientes',
-    path: '/dashboard/user',
+    path: '/dashboard/client',
     icon: getIcon(peopleOutline)
   },
   {

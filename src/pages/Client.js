@@ -1,7 +1,7 @@
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -9,7 +9,6 @@ import {
   Card,
   Table,
   Stack,
-  Avatar,
   Button,
   Checkbox,
   TableRow,
@@ -32,12 +31,11 @@ import USERLIST from '../_mocks_/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
-  { id: '' }
+  { id: 'username', label: 'Usuario', alignRight: false },
+  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'cuit', label: 'CUIT', alignRight: false },
+  { id: 'razonSocial', label: 'Razón Social', alignRight: false },
+  { id: 'cantObras', label: 'Cantidad de obras', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -71,11 +69,11 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function User() {
+export default function Client() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('name');
+  const [orderBy, setOrderBy] = useState('username');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -87,7 +85,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = USERLIST.map((n) => n.username);
       setSelected(newSelecteds);
       return;
     }
@@ -132,11 +130,11 @@ export default function User() {
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
-    <Page title="User | Minimal-UI">
+    <Page title="Clientes">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Clientes
           </Typography>
           <Button
             variant="contained"
@@ -144,7 +142,7 @@ export default function User() {
             to="#"
             startIcon={<Icon icon={plusFill} />}
           >
-            New User
+            Nuevo cliente
           </Button>
         </Stack>
 
@@ -171,8 +169,8 @@ export default function User() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const { id, username, email, cantObras, cuit, razonSocial } = row;
+                      const isItemSelected = selected.indexOf(username) !== -1;
 
                       return (
                         <TableRow
@@ -186,28 +184,18 @@ export default function User() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
+                              onChange={(event) => handleClick(event, username)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={avatarUrl} />
-                              <Typography variant="subtitle2" noWrap>
-                                {name}
-                              </Typography>
-                            </Stack>
+                            <Typography variant="subtitle2" noWrap>
+                              {username}
+                            </Typography>
                           </TableCell>
-                          <TableCell align="left">{company}</TableCell>
-                          <TableCell align="left">{role}</TableCell>
-                          <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                          <TableCell align="left">
-                            <Label
-                              variant="ghost"
-                              color={(status === 'banned' && 'error') || 'success'}
-                            >
-                              {sentenceCase(status)}
-                            </Label>
-                          </TableCell>
+                          <TableCell align="left">{email}</TableCell>
+                          <TableCell align="left">{cuit}</TableCell>
+                          <TableCell align="left">{razonSocial}</TableCell>
+                          <TableCell align="left">{cantObras}</TableCell>
 
                           <TableCell align="right">
                             <UserMoreMenu />
