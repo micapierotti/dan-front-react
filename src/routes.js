@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import DashboardApp from './pages/DashboardApp';
 import Products from './pages/Products';
+import NewProduct from './pages/NewProduct';
 import Blog from './pages/Blog';
 import Client from './pages/Client';
 import NewClient from './pages/NewClient';
@@ -27,6 +28,7 @@ export default function Router() {
         { path: 'client/new', element: <NewClient /> },
         { path: 'employee', element: <Employee /> },
         { path: 'products', element: <Products /> },
+        { path: 'products/new', element: <NewProduct /> },
         { path: 'blog', element: <Blog /> }
       ]
     },

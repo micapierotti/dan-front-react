@@ -1,22 +1,26 @@
+import axios from "axios";
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 // material
-import { Container, Stack, Typography } from '@mui/material';
+import { Container, Stack, Typography, Button } from '@mui/material';
+import { Icon } from '@iconify/react';
+import plusFill from '@iconify/icons-eva/plus-fill';
 // components
 import Page from '../components/Page';
 import {
-  ProductSort,
-  ProductList,
-  ProductCartWidget,
-  ProductFilterSidebar
+  ProductList
 } from '../components/_dashboard/products';
-//
+// utils
+import { mockImgProduct } from '../utils/mockImages';
 import PRODUCTS from '../_mocks_/products';
 
 // ----------------------------------------------------------------------
+const PRODUCTS_REST_URL = "http://localhost:9001/api/productos";
 
 export default function EcommerceShop() {
   const [openFilter, setOpenFilter] = useState(false);
+  const [productos, setProductos] = useState(null);
 
   const formik = useFormik({
     initialValues: {
@@ -33,6 +37,16 @@ export default function EcommerceShop() {
 
   const { resetForm, handleSubmit } = formik;
 
+  React.useEffect(() => {
+    axios.get(PRODUCTS_REST_URL).then((response) => {
+      setProductos(response.data);
+    });
+  }, []);
+
+  if (!productos) return null;
+
+  console.log(productos);
+
   const handleOpenFilter = () => {
     setOpenFilter(true);
   };
@@ -47,33 +61,36 @@ export default function EcommerceShop() {
   };
 
   return (
-    <Page title="Dashboard: Products | Minimal-UI">
+    <Page title="Productos">
       <Container>
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
-        </Typography>
-
-        <Stack
-          direction="row"
-          flexWrap="wrap-reverse"
-          alignItems="center"
-          justifyContent="flex-end"
-          sx={{ mb: 5 }}
-        >
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ProductFilterSidebar
-              formik={formik}
-              isOpenFilter={openFilter}
-              onResetFilter={handleResetFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
-            <ProductSort />
-          </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+          <Typography variant="h4" sx={{ mb: 5 }}>
+            Productos
+          </Typography>
+          <Button
+            variant="contained"
+            component={RouterLink}
+            to="/dashboard/products/new"
+            startIcon={<Icon icon={plusFill} />}
+          >
+            Nuevo producto
+          </Button>
         </Stack>
-
-        <ProductList products={PRODUCTS} />
-        <ProductCartWidget />
+        <ProductList products={
+          productos.map((p, index) => {
+            const setIndex = index + 1;
+            return {
+              id: p.id,
+              cover: mockImgProduct(setIndex),
+              name: p.nombre,
+              price: p.precio,
+              currentStock: p.stockActual,
+              minStock: p.stockMinimo,
+              description: p.descripcion
+            };
+          })
+        }
+        />
       </Container>
     </Page>
   );
