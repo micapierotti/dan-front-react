@@ -37,10 +37,13 @@ export default function EcommerceShop() {
 
   const { resetForm, handleSubmit } = formik;
 
-  React.useEffect(() => {
-    axios.get(PRODUCTS_REST_URL).then((response) => {
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get(PRODUCTS_REST_URL);
       setProductos(response.data);
-    });
+      console.log(response.data);
+    }
+    fetchData();
   }, []);
 
   if (!productos) return null;

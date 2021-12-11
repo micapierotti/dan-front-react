@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
+import axios from "axios";
 import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import eyeFill from '@iconify/icons-eva/eye-fill';
@@ -29,8 +30,24 @@ export default function NewClientForm() {
           maxCuentaCorriente: ''
         },
         validationSchema: RegisterSchema,
-        onSubmit: () => {
-          navigate('/dashboard', { replace: true });
+        onSubmit: (values) => {
+          axios.post('http://localhost:9000/api/cliente', {
+            razonSocial: values.razonSocial,
+            cuit: values.cuit,
+            mail: values.email,
+            maxCuentaCorriente: values.maxCuentaCorriente,
+            username: values.username,
+            password: values.password,
+          }).then((response) => {
+            if (response.data !== null) {
+              alert('Se creó el cliente exitosamente.');
+              navigate('/dashboard/client', { replace: true });
+            } else {
+              alert('Hubo un error al crear el cliente.');
+            }
+          }).catch((error) => {
+            alert(`Ha ocurrido un error.`);
+          });
         }
       });
 

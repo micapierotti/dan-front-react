@@ -1,7 +1,7 @@
 import { filter } from 'lodash';
+import axios from "axios";
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -25,14 +25,12 @@ import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dashboard/user';
-//
-import USERLIST from '../_mocks_/user';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'username', label: 'Usuario', alignRight: false },
-  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'mail', label: 'Email', alignRight: false },
   { id: 'cuit', label: 'CUIT', alignRight: false },
   { id: 'razonSocial', label: 'Razón Social', alignRight: false },
   { id: 'cantObras', label: 'Cantidad de obras', alignRight: false }
@@ -64,7 +62,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -76,6 +74,17 @@ export default function Client() {
   const [orderBy, setOrderBy] = useState('username');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [USERLIST, setUSERLIST] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get('http://localhost:9000/api/cliente');
+      setUSERLIST(response.data);
+      console.log(response.data);
+    }
+
+    fetchData();
+  }, []);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -128,7 +137,6 @@ export default function Client() {
   const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
-
   return (
     <Page title="Clientes">
       <Container>
@@ -169,7 +177,7 @@ export default function Client() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, username, email, cantObras, cuit, razonSocial } = row;
+                      const { id, username, mail, cantObras, cuit, razonSocial } = row;
                       const isItemSelected = selected.indexOf(username) !== -1;
 
                       return (
@@ -192,13 +200,12 @@ export default function Client() {
                               {username}
                             </Typography>
                           </TableCell>
-                          <TableCell align="left">{email}</TableCell>
+                          <TableCell align="left">{mail}</TableCell>
                           <TableCell align="left">{cuit}</TableCell>
                           <TableCell align="left">{razonSocial}</TableCell>
                           <TableCell align="left">{cantObras}</TableCell>
-
                           <TableCell align="right">
-                            <UserMoreMenu />
+                            <UserMoreMenu idCliente={id} />
                           </TableCell>
                         </TableRow>
                       );

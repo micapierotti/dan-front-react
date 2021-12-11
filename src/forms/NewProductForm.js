@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import axios from "axios";
 import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useFormik, Form, FormikProvider } from "formik";
@@ -11,14 +12,12 @@ import { LoadingButton } from "@mui/lab";
 
 export default function NewProductForm() {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-
   const RegisterSchema = Yup.object().shape({
     name: Yup.string()
       .max(20, "Máximo de caracteres: 20")
       .required("Nombre es obligatorio"),
     price: Yup.number().required("Precio es obligatorio"),
-    actualStock: Yup.number().required("Stock actual es obligatorio"),
+    currentStock: Yup.number().required("Stock actual es obligatorio"),
     minStock: Yup.number().required("Stock mínimo es obligatorio"),
     unit: Yup.string().required("Unidad es obligatoria"),
   });
@@ -28,14 +27,35 @@ export default function NewProductForm() {
       name: "",
       description: "",
       price: "",
-      actualStock: "",
+      currentStock: "",
       minStock: "",
       unit: "",
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate("/dashboard", { replace: true });
-    },
+    onSubmit: (values) => {
+      axios.post('http://localhost:9001/api/productos', {
+        id: 55,
+        nombre: values.name,
+        descripcion: values.description,
+        precio: values.price,
+        stockActual: values.currentStock,
+        stockMinimo: values.minStock,
+        unidad: {
+          descripcion: values.unit
+        }
+      }).then((response) => {
+        if (response.data !== null) {
+          alert('Se creó el producto exitosamente.');
+          navigate('/dashboard/products', { replace: true });
+        } else {
+          alert('Hubo un error al crear la obra.');
+        }
+      }).catch((error) => {
+        alert(`Ha ocurrido un error.`);
+        console.log(error);
+      });
+    console.log("values", values);
+    }
   });
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
@@ -79,9 +99,9 @@ export default function NewProductForm() {
             <TextField
               fullWidth
               label="Stock Actual"
-              {...getFieldProps("actualStock")}
-              error={Boolean(touched.actualStock && errors.actualStock)}
-              helperText={touched.actualStock && errors.actualStock}
+              {...getFieldProps("currentStock")}
+              error={Boolean(touched.currentStock && errors.currentStock)}
+              helperText={touched.currentStock && errors.currentStock}
             />
 
             <TextField

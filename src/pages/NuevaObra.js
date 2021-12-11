@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 import { Box, Container, Typography, Card, CardContent, Grid } from "@mui/material";
 import Page from "../components/Page";
-import NewObraForm from "../components/NewObraForm";
+import NewObraForm from "../forms/NewObraForm";
 
 const RootStyle = styled(Page)(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
