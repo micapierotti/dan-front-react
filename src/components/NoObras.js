@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types'
-import { Paper, Typography } from '@mui/material'
+import PropTypes from 'prop-types';
+import { Paper, Typography } from '@mui/material';
 
 ObrasNotFound.propTypes = {
   searchQuery: PropTypes.string
-}
+};
 
 export default function ObrasNotFound({ ...other }) {
   return (

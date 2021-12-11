@@ -30,115 +30,114 @@ const TABLE_HEAD = [
   { id: 'cliente', label: 'Cliente', alignRight: false },
   { id: 'superficie', label: 'Superficie', alignRight: false },
   { id: '' }
-]
+];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
-    return -1
+    return -1;
   }
   if (b[orderBy] > a[orderBy]) {
-    return 1
+    return 1;
   }
-  return 0
+  return 0;
 }
 
 function getComparator(order, orderBy) {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
 function applySortFilter(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index])
+  const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0])
-    if (order !== 0) return order
-    return a[1] - b[1]
-  })
-  return stabilizedThis.map((el) => el[0])
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
 }
 
 export default function Obras() {
-  const [page, setPage] = useState(0)
-  const [order, setOrder] = useState('asc')
-  const [selected, setSelected] = useState([])
-  const [orderBy, setOrderBy] = useState('id')
-  const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [OBRASLIST, setOBRASLIST] = useState([])
-  const [listaObras, setListaObras] = useState([])
-  const [listaObrasVacia, setListaObrasVacia] = useState(true)
-  const [emptyRows, setEmptyRows] = useState(0)
+  const [page, setPage] = useState(0);
+  const [order, setOrder] = useState('asc');
+  const [selected, setSelected] = useState([]);
+  const [orderBy, setOrderBy] = useState('id');
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [OBRASLIST, setOBRASLIST] = useState([]);
+  const [listaObras, setListaObras] = useState([]);
+  const [listaObrasVacia, setListaObrasVacia] = useState(true);
+  const [emptyRows, setEmptyRows] = useState(0);
 
   useEffect(() => {
       async function fetchData() {
-        const response = await axios.get('http://localhost:9000/api/obra')
-        setOBRASLIST(response.data)
-        console.log(response.data)
+        const response = await axios.get('http://localhost:9000/api/obra');
+        setOBRASLIST(response.data);
+        console.log(response.data);
       }
 
-      fetchData()
-    }, []
-  )
+      fetchData();
+    }, []);
 
   useEffect(() => {
-    setEmptyRows(page > 0 ? Math.max(0, (1 + page) * rowsPerPage - OBRASLIST.length) : 0)
-    setListaObras(applySortFilter(OBRASLIST, getComparator(order, orderBy)))
-    setListaObrasVacia(listaObras.length === 0)
-  }, [OBRASLIST, listaObras.length, order, orderBy, page, rowsPerPage])
+    setEmptyRows(page > 0 ? Math.max(0, (1 + page) * rowsPerPage - OBRASLIST.length) : 0);
+    setListaObras(applySortFilter(OBRASLIST, getComparator(order, orderBy)));
+    setListaObrasVacia(listaObras.length === 0);
+  }, [OBRASLIST, listaObras.length, order, orderBy, page, rowsPerPage]);
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc'
-    setOrder(isAsc ? 'desc' : 'asc')
-    setOrderBy(property)
-  }
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = OBRASLIST.map((n) => n.name)
-      setSelected(newSelecteds)
-      return
+      const newSelecteds = OBRASLIST.map((n) => n.name);
+      setSelected(newSelecteds);
+      return;
     }
-    setSelected([])
-  }
+    setSelected([]);
+  };
 
   const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name)
-    let newSelected = []
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name)
+      newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
+      newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
+      newSelected = newSelected.concat(selected.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1)
-      )
+      );
     }
-    setSelected(newSelected)
-  }
+    setSelected(newSelected);
+  };
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage)
-  }
+    setPage(newPage);
+  };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   return (
-    <Page title='Obras'>
+    <Page title="Obras">
       <Container>
-        <Stack direction='row' alignItems='center' justifyContent='space-between' mb={5}>
-          <Typography variant='h4' gutterBottom>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+          <Typography variant="h4" gutterBottom>
             Obras
           </Typography>
           <Button
-            variant='contained'
+            variant="contained"
             component={RouterLink}
-            to='/dashboard/obras/nuevaObra'
+            to="/dashboard/obras/nuevaObra"
             startIcon={<Icon icon={plusFill} />}
           >
             Nueva obra
@@ -162,39 +161,39 @@ export default function Obras() {
                   {listaObras
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, tipo, direccion, clienteId, superficie } = row
-                      const avatarUrl = `/static/mock-images/products/product_${Math.floor(Math.random() * 24) + 1}.jpg`
-                      const isItemSelected = selected.indexOf(id) !== -1
+                      const { id, tipo, direccion, clienteId, superficie } = row;
+                      const avatarUrl = `/static/mock-images/products/product_${Math.floor(Math.random() * 24) + 1}.jpg`;
+                      const isItemSelected = selected.indexOf(id) !== -1;
 
                       return (
                         <TableRow
                           hover
                           key={id}
                           tabIndex={-1}
-                          role='checkbox'
+                          role="checkbox"
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell padding='checkbox'>
+                          <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
                               onChange={(event) => handleClick(event, id)}
                             />
                           </TableCell>
-                          <TableCell component='th' scope='row' padding='none'>
-                            <Stack direction='row' alignItems='center' spacing={2}>
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
                               <Avatar alt={id} src={avatarUrl} />
-                              <Typography variant='subtitle2' noWrap>
+                              <Typography variant="subtitle2" noWrap>
                                 {id}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align='left'>{tipo}</TableCell>
-                          <TableCell align='left'>{direccion}</TableCell>
-                          <TableCell align='left'>{clienteId}</TableCell>
-                          <TableCell align='left'>{superficie}</TableCell>
+                          <TableCell align="left">{tipo}</TableCell>
+                          <TableCell align="left">{direccion}</TableCell>
+                          <TableCell align="left">{clienteId}</TableCell>
+                          <TableCell align="left">{superficie}</TableCell>
 
-                          <TableCell align='right'>
+                          <TableCell align="right">
                             <UserMoreMenu />
                           </TableCell>
                         </TableRow>
@@ -209,7 +208,7 @@ export default function Obras() {
                 {listaObrasVacia && (
                   <TableBody>
                     <TableRow>
-                      <TableCell align='center' colSpan={6} sx={{ py: 3 }}>
+                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
                         <ObrasNotFound />
                       </TableCell>
                     </TableRow>
@@ -221,7 +220,7 @@ export default function Obras() {
 
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
-            component='div'
+            component="div"
             count={OBRASLIST.length}
             rowsPerPage={rowsPerPage}
             page={page}
