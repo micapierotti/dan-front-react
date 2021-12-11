@@ -1,14 +1,14 @@
 import { useFormik } from 'formik';
 import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 // material
-import { Container, Stack, Typography } from '@mui/material';
+import { Container, Stack, Typography, Button } from '@mui/material';
+import { Icon } from '@iconify/react';
+import plusFill from '@iconify/icons-eva/plus-fill';
 // components
 import Page from '../components/Page';
 import {
-  ProductSort,
-  ProductList,
-  ProductCartWidget,
-  ProductFilterSidebar
+  ProductList
 } from '../components/_dashboard/products';
 //
 import PRODUCTS from '../_mocks_/products';
@@ -47,33 +47,23 @@ export default function EcommerceShop() {
   };
 
   return (
-    <Page title="Dashboard: Products | Minimal-UI">
+    <Page title="Productos">
       <Container>
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
-        </Typography>
-
-        <Stack
-          direction="row"
-          flexWrap="wrap-reverse"
-          alignItems="center"
-          justifyContent="flex-end"
-          sx={{ mb: 5 }}
-        >
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ProductFilterSidebar
-              formik={formik}
-              isOpenFilter={openFilter}
-              onResetFilter={handleResetFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
-            <ProductSort />
-          </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+          <Typography variant="h4" sx={{ mb: 5 }}>
+            Productos
+          </Typography>
+          <Button
+            variant="contained"
+            component={RouterLink}
+            to="/dashboard/products/new"
+            startIcon={<Icon icon={plusFill} />}
+          >
+            Nuevo producto
+          </Button>
         </Stack>
 
         <ProductList products={PRODUCTS} />
-        <ProductCartWidget />
       </Container>
     </Page>
   );
