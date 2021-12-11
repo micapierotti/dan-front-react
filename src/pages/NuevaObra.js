@@ -1,12 +1,23 @@
 import { styled } from "@mui/material/styles";
-import { Box, Container, Typography, Card, CardContent, Grid } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
+import { Icon } from "@iconify/react";
+import {
+  Box,
+  Container,
+  Typography,
+  Stack,
+  Card,
+  CardContent,
+  Grid,
+  Button,
+} from "@mui/material";
 import Page from "../components/Page";
 import NewObraForm from "../forms/NewObraForm";
 
 const RootStyle = styled(Page)(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
-    display: "flex"
-  }
+    display: "flex",
+  },
 }));
 
 const ContentStyle = styled("div")(({ theme }) => ({
@@ -15,7 +26,7 @@ const ContentStyle = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
-  padding: theme.spacing(0, 0)
+  padding: theme.spacing(0, 0),
 }));
 
 export default function NuevaObra() {
@@ -33,11 +44,25 @@ export default function NuevaObra() {
             <Container>
               <ContentStyle>
                 <Box sx={{ mb: 5 }}>
-                  <Typography variant="h4" gutterBottom>
-                    Nueva obra
-                  </Typography>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    mb={5}
+                  >
+                    <Typography variant="h4" gutterBottom>
+                      Nueva obra
+                    </Typography>
+                    <Button
+                      variant="contained"
+                      component={RouterLink}
+                      to="/dashboard/obras"
+                      startIcon={<Icon icon="eva:arrow-back-fill" />}
+                    >
+                      Atrás
+                    </Button>
+                  </Stack>
                 </Box>
-
                 <NewObraForm />
               </ContentStyle>
             </Container>

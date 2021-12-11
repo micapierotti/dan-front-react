@@ -42,12 +42,6 @@ const ContentStyle = styled('div')(({ theme }) => ({
 export default function Login() {
   return (
     <RootStyle title="Login">
-      <AuthLayout>
-        ¿No tienes una cuenta? &nbsp;
-        <Link underline="none" variant="subtitle2" component={RouterLink} to="/register">
-          Empieza ahora
-        </Link>
-      </AuthLayout>
 
       <Container maxWidth="sm">
         <ContentStyle>
@@ -57,18 +51,7 @@ export default function Login() {
             </Typography>
             <Typography sx={{ color: 'text.secondary' }}>Completa el formulario debajo.</Typography>
           </Stack>
-          <AuthSocial />
-
           <LoginForm />
-
-          <MHidden width="smUp">
-            <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-              ¿No tienes una cuenta?&nbsp;
-              <Link variant="subtitle2" component={RouterLink} to="register">
-                Empieza ahora
-              </Link>
-            </Typography>
-          </MHidden>
         </ContentStyle>
       </Container>
     </RootStyle>

@@ -38,7 +38,7 @@ export default function LoginForm() {
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+      navigate('/dashboard/client', { replace: true });
     }
   });
 
@@ -87,10 +87,6 @@ export default function LoginForm() {
             control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
             label="Recuérdame"
           />
-
-          <Link component={RouterLink} variant="subtitle2" to="#">
-            ¿No recuerdas tu contraseña?
-          </Link>
         </Stack>
 
         <LoadingButton

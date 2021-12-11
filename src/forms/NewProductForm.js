@@ -1,16 +1,45 @@
 import * as Yup from "yup";
 import axios from "axios";
-import { useState } from "react";
+import { React, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useFormik, Form, FormikProvider } from "formik";
 import eyeFill from "@iconify/icons-eva/eye-fill";
 import eyeOffFill from "@iconify/icons-eva/eye-off-fill";
 import { useNavigate } from "react-router-dom";
 // material
-import { Stack, TextField, IconButton, InputAdornment } from "@mui/material";
+import { Stack, TextField, MenuItem } from '@mui/material';
 import { LoadingButton } from "@mui/lab";
 
+const tiposDeUnidad = [
+  {
+    value: "KG",
+    label: "KG",
+  },
+  {
+    value: "M",
+    label: "M",
+  },
+  {
+    value: "LT",
+    label: "LT",
+  },
+  {
+    value: "CM",
+    label: "CM",
+  },
+  {
+    value: "TN",
+    label: "TN",
+  },
+];
+
 export default function NewProductForm() {
+  const [tipoUnidad, setTipoUnida] = useState('KG');
+
+  const changeTipo = (event) => {
+    setTipoUnida(event.target.value);
+  };
+
   const navigate = useNavigate();
   const RegisterSchema = Yup.object().shape({
     name: Yup.string()
@@ -33,29 +62,32 @@ export default function NewProductForm() {
     },
     validationSchema: RegisterSchema,
     onSubmit: (values) => {
-      axios.post('http://localhost:9001/api/productos', {
-        id: 55,
-        nombre: values.name,
-        descripcion: values.description,
-        precio: values.price,
-        stockActual: values.currentStock,
-        stockMinimo: values.minStock,
-        unidad: {
-          descripcion: values.unit
-        }
-      }).then((response) => {
-        if (response.data !== null) {
-          alert('Se creó el producto exitosamente.');
-          navigate('/dashboard/products', { replace: true });
-        } else {
-          alert('Hubo un error al crear la obra.');
-        }
-      }).catch((error) => {
-        alert(`Ha ocurrido un error.`);
-        console.log(error);
-      });
-    console.log("values", values);
-    }
+      axios
+        .post("http://localhost:9001/api/productos", {
+          id: 55,
+          nombre: values.name,
+          descripcion: values.description,
+          precio: values.price,
+          stockActual: values.currentStock,
+          stockMinimo: values.minStock,
+          unidad: {
+            descripcion: values.unit,
+          },
+        })
+        .then((response) => {
+          if (response.data !== null) {
+            alert("Se creó el producto exitosamente.");
+            navigate("/dashboard/products", { replace: true });
+          } else {
+            alert("Hubo un error al crear la obra.");
+          }
+        })
+        .catch((error) => {
+          alert(`Ha ocurrido un error.`);
+          console.log(error);
+        });
+      console.log("values", values);
+    },
   });
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
@@ -73,15 +105,24 @@ export default function NewProductForm() {
               helperText={touched.name && errors.name}
             />
             <TextField
+              id="tipo"
+              select
               fullWidth
               label="Unidad"
-              {...getFieldProps("unit")}
-              error={Boolean(touched.unit && errors.unit)}
-              helperText={touched.unit && errors.unit}
-            />
+              value={tipoUnidad}
+              onChange={changeTipo}
+            >
+              {tiposDeUnidad.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
           </Stack>
           <TextField
             fullWidth
+            multiline
+            rows={4}
             label="Descripción"
             {...getFieldProps("description")}
             helperText={touched.name}
