@@ -4,6 +4,7 @@ import { useFormik, Form, FormikProvider } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { Stack, TextField, MenuItem } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
+import axios from 'axios';
 
 const tiposDeObra = [
   {
@@ -33,8 +34,7 @@ export default function NewObraForm() {
   }
 
   const RegisterSchema = Yup.object().shape({
-    id: Yup.number().required('Obligatorio'),
-    idCliente: Yup.number().required('Obligatorio'),
+    clienteId: Yup.number().required('Obligatorio'),
     latitud: Yup.number().required('Obligatorio'),
     longitud: Yup.number().required('Obligatorio'),
     superficie: Yup.number().required('Obligatorio'),
@@ -45,9 +45,8 @@ export default function NewObraForm() {
 
   const formik = useFormik({
     initialValues: {
-      id: '',
       tipo: '',
-      idCliente: '',
+      clienteId: '',
       direccion: '',
       latitud: '',
       longitud: '',
@@ -55,8 +54,22 @@ export default function NewObraForm() {
       descripcion: '',
     },
     validationSchema: RegisterSchema,
-    onSubmit: () => {
-      navigate('/dashboard/obras', { replace: true });
+    onSubmit: async (values) => {
+      const response = await axios.post("http://localhost:9000/api/obra", {
+        descripcion: values.descripcion,
+        latitud: values.latitud,
+        longitud: values.longitud,
+        direccion: values.direccion,
+        superficie: values.superficie,
+        tipo: tipoObra,
+        clienteId: values.clienteId
+      })
+      if(response.data !== null) {
+        alert('Se creó la obra exitosamente.');
+        navigate('/dashboard/obras', { replace: true });
+      } else {
+        alert('Hubo un error al crear la obra.');
+      }
     }
   })
 
@@ -69,14 +82,6 @@ export default function NewObraForm() {
       <Form autoComplete="off" noValidate onSubmit={handleSubmit} >
         <Stack spacing={3} >
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <TextField
-              id="id"
-              label="Id"
-              type="number"
-              {...getFieldProps('id')}
-              error={Boolean(touched.id && errors.id)}
-              helperText={touched.id && errors.id}
-            />
             <TextField
               id="tipo"
               select
@@ -95,12 +100,12 @@ export default function NewObraForm() {
 
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
-              id="idCliente"
+              id="clienteId"
               label="Id cliente"
               type="number"
-              {...getFieldProps('idCliente')}
-              error={Boolean(touched.idCliente && errors.idCliente)}
-              helperText={touched.idCliente && errors.idCliente}
+              {...getFieldProps('clienteId')}
+              error={Boolean(touched.clienteId && errors.clienteId)}
+              helperText={touched.clienteId && errors.clienteId}
             />
           <TextField
             fullWidth
