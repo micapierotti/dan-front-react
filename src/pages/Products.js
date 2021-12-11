@@ -1,5 +1,6 @@
+import axios from "axios";
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { Container, Stack, Typography, Button } from '@mui/material';
@@ -10,13 +11,16 @@ import Page from '../components/Page';
 import {
   ProductList
 } from '../components/_dashboard/products';
-//
+// utils
+import { mockImgProduct } from '../utils/mockImages';
 import PRODUCTS from '../_mocks_/products';
 
 // ----------------------------------------------------------------------
+const PRODUCTS_REST_URL = "http://localhost:9001/api/productos";
 
 export default function EcommerceShop() {
   const [openFilter, setOpenFilter] = useState(false);
+  const [productos, setProductos] = useState(null);
 
   const formik = useFormik({
     initialValues: {
@@ -32,6 +36,16 @@ export default function EcommerceShop() {
   });
 
   const { resetForm, handleSubmit } = formik;
+
+  React.useEffect(() => {
+    axios.get(PRODUCTS_REST_URL).then((response) => {
+      setProductos(response.data);
+    });
+  }, []);
+
+  if (!productos) return null;
+
+  console.log(productos);
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -62,8 +76,21 @@ export default function EcommerceShop() {
             Nuevo producto
           </Button>
         </Stack>
-
-        <ProductList products={PRODUCTS} />
+        <ProductList products={
+          productos.map((p, index) => {
+            const setIndex = index + 1;
+            return {
+              id: p.id,
+              cover: mockImgProduct(setIndex),
+              name: p.nombre,
+              price: p.precio,
+              currentStock: p.stockActual,
+              minStock: p.stockMinimo,
+              description: p.descripcion
+            };
+          })
+        }
+        />
       </Container>
     </Page>
   );
