@@ -1,8 +1,7 @@
-import { filter } from 'lodash'
-import { Icon } from '@iconify/react'
-import { useState } from 'react'
-import plusFill from '@iconify/icons-eva/plus-fill'
-import { Link as RouterLink } from 'react-router-dom'
+import { Icon } from '@iconify/react';
+import { useEffect, useState } from 'react';
+import plusFill from '@iconify/icons-eva/plus-fill';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Card,
   Table,
@@ -17,12 +16,12 @@ import {
   Typography,
   TableContainer,
   TablePagination
-} from '@mui/material'
-import Page from '../components/Page'
-import Scrollbar from '../components/Scrollbar'
-import SearchNotFound from '../components/SearchNotFound'
-import { UserListHead, UserMoreMenu } from '../components/_dashboard/user'
-import OBRASLIST from '../_mocks_/obras'
+} from '@mui/material';
+import axios from 'axios';
+import Page from '../components/Page';
+import Scrollbar from '../components/Scrollbar';
+import { UserListHead, UserMoreMenu } from '../components/_dashboard/user';
+import ObrasNotFound from '../components/NoObras';
 
 const TABLE_HEAD = [
   { id: 'id', label: 'Id', alignRight: false },
@@ -49,16 +48,13 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy)
 }
 
-function applySortFilter(array, comparator, query) {
+function applySortFilter(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index])
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0])
     if (order !== 0) return order
     return a[1] - b[1]
   })
-  if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1)
-  }
   return stabilizedThis.map((el) => el[0])
 }
 
@@ -67,14 +63,34 @@ export default function Obras() {
   const [order, setOrder] = useState('asc')
   const [selected, setSelected] = useState([])
   const [orderBy, setOrderBy] = useState('id')
-  const [filterName, setFilterName] = useState('')
   const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [OBRASLIST, setOBRASLIST] = useState([])
+  const [listaObras, setListaObras] = useState([])
+  const [listaObrasVacia, setListaObrasVacia] = useState(true)
+  const [emptyRows, setEmptyRows] = useState(0)
+
+  useEffect(() => {
+      async function fetchData() {
+        const response = await axios.get('http://localhost:9000/api/obra')
+        setOBRASLIST(response.data)
+        console.log(response.data)
+      }
+
+      fetchData()
+    }, []
+  )
+
+  useEffect(() => {
+    setEmptyRows(page > 0 ? Math.max(0, (1 + page) * rowsPerPage - OBRASLIST.length) : 0)
+    setListaObras(applySortFilter(OBRASLIST, getComparator(order, orderBy)))
+    setListaObrasVacia(listaObras.length === 0)
+  }, [OBRASLIST, listaObras.length, order, orderBy, page, rowsPerPage])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
     setOrderBy(property)
-  };
+  }
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -112,23 +128,17 @@ export default function Obras() {
     setPage(0)
   }
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - OBRASLIST.length) : 0
-
-  const filteredUsers = applySortFilter(OBRASLIST, getComparator(order, orderBy), filterName)
-
-  const isUserNotFound = filteredUsers.length === 0
-
   return (
-    <Page title="Obras">
+    <Page title='Obras'>
       <Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
+        <Stack direction='row' alignItems='center' justifyContent='space-between' mb={5}>
+          <Typography variant='h4' gutterBottom>
             Obras
           </Typography>
           <Button
-            variant="contained"
+            variant='contained'
             component={RouterLink}
-            to="/dashboard/obras/nuevaObra"
+            to='/dashboard/obras/nuevaObra'
             startIcon={<Icon icon={plusFill} />}
           >
             Nueva obra
@@ -149,10 +159,11 @@ export default function Obras() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers
+                  {listaObras
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, tipo, direccion, cliente, superficie, avatarUrl } = row
+                      const { id, tipo, direccion, clienteId, superficie } = row
+                      const avatarUrl = `/static/mock-images/products/product_${Math.floor(Math.random() * 24) + 1}.jpg`
                       const isItemSelected = selected.indexOf(id) !== -1
 
                       return (
@@ -160,30 +171,30 @@ export default function Obras() {
                           hover
                           key={id}
                           tabIndex={-1}
-                          role="checkbox"
+                          role='checkbox'
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell padding="checkbox">
+                          <TableCell padding='checkbox'>
                             <Checkbox
                               checked={isItemSelected}
                               onChange={(event) => handleClick(event, id)}
                             />
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
+                          <TableCell component='th' scope='row' padding='none'>
+                            <Stack direction='row' alignItems='center' spacing={2}>
                               <Avatar alt={id} src={avatarUrl} />
-                              <Typography variant="subtitle2" noWrap>
+                              <Typography variant='subtitle2' noWrap>
                                 {id}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{tipo}</TableCell>
-                          <TableCell align="left">{direccion}</TableCell>
-                          <TableCell align="left">{cliente}</TableCell>
-                          <TableCell align="left">{superficie}</TableCell>
+                          <TableCell align='left'>{tipo}</TableCell>
+                          <TableCell align='left'>{direccion}</TableCell>
+                          <TableCell align='left'>{clienteId}</TableCell>
+                          <TableCell align='left'>{superficie}</TableCell>
 
-                          <TableCell align="right">
+                          <TableCell align='right'>
                             <UserMoreMenu />
                           </TableCell>
                         </TableRow>
@@ -195,11 +206,11 @@ export default function Obras() {
                     </TableRow>
                   )}
                 </TableBody>
-                {isUserNotFound && (
+                {listaObrasVacia && (
                   <TableBody>
                     <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
+                      <TableCell align='center' colSpan={6} sx={{ py: 3 }}>
+                        <ObrasNotFound />
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -210,7 +221,7 @@ export default function Obras() {
 
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
-            component="div"
+            component='div'
             count={OBRASLIST.length}
             rowsPerPage={rowsPerPage}
             page={page}

@@ -7,7 +7,7 @@ const obras = [...Array(24)].map((_, index) => ({
   avatarUrl: mockImgProduct(index + 1),
   tipo: sample(['EDIFICIO', 'CASA', 'REFORMA', 'VIAL']),
   direccion: faker.address.city(),
-  cliente: faker.company.companyName(),
+  clienteId: faker.company.companyName(),
   superficie: faker.random.number()
 }))
 
