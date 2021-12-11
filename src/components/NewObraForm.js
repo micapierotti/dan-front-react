@@ -9,21 +9,21 @@ import axios from 'axios';
 const tiposDeObra = [
   {
     value: 'REFORMA',
-    label: 'REFORMA',
+    label: 'REFORMA'
   },
   {
     value: 'CASA',
-    label: 'CASA',
+    label: 'CASA'
   },
   {
     value: 'EDIFICIO',
-    label: 'EDIFICIO',
+    label: 'EDIFICIO'
   },
   {
     value: 'VIAL',
-    label: 'VIAL',
-  },
-]
+    label: 'VIAL'
+  }
+];
 
 export default function NewObraForm() {
   const navigate = useNavigate()
@@ -51,11 +51,11 @@ export default function NewObraForm() {
       latitud: '',
       longitud: '',
       superficie: '',
-      descripcion: '',
+      descripcion: ''
     },
     validationSchema: RegisterSchema,
-    onSubmit: async (values) => {
-      const response = await axios.post("http://localhost:9000/api/obra", {
+    onSubmit: (values) => {
+      axios.post('http://localhost:9000/api/obra', {
         descripcion: values.descripcion,
         latitud: values.latitud,
         longitud: values.longitud,
@@ -63,30 +63,31 @@ export default function NewObraForm() {
         superficie: values.superficie,
         tipo: tipoObra,
         clienteId: values.clienteId
+      }).then(response => {
+        if (response.data !== null) {
+          alert('Se creó la obra exitosamente.')
+          navigate('/dashboard/obras', { replace: true })
+        } else {
+          alert('Hubo un error al crear la obra.')
+        }
+      }).catch(error => {
+        alert(`No se encontró al cliente indicado.`)
       })
-      if(response.data !== null) {
-        alert('Se creó la obra exitosamente.');
-        navigate('/dashboard/obras', { replace: true });
-      } else {
-        alert('Hubo un error al crear la obra.');
-      }
     }
   })
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik
 
   return (
-    // id (int), descripcion(s), latitud(float), longitud(float), direccion(s), superficie(int), tipo(s), clienteId(int)
-
     <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit} >
-        <Stack spacing={3} >
+      <Form autoComplete='off' noValidate onSubmit={handleSubmit}>
+        <Stack spacing={3}>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
-              id="tipo"
+              id='tipo'
               select
               fullWidth
-              label="Tipo de Obra"
+              label='Tipo de Obra'
               value={tipoObra}
               onChange={changeTipo}
             >
@@ -100,44 +101,44 @@ export default function NewObraForm() {
 
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
-              id="clienteId"
-              label="Id cliente"
-              type="number"
+              id='clienteId'
+              label='Id cliente'
+              type='number'
               {...getFieldProps('clienteId')}
               error={Boolean(touched.clienteId && errors.clienteId)}
               helperText={touched.clienteId && errors.clienteId}
             />
-          <TextField
-            fullWidth
-            autoComplete="direccion"
-            label="Dirección"
-            {...getFieldProps('direccion')}
-            error={Boolean(touched.direccion && errors.direccion)}
-            helperText={touched.direccion && errors.direccion}
-          />
+            <TextField
+              fullWidth
+              autoComplete='direccion'
+              label='Dirección'
+              {...getFieldProps('direccion')}
+              error={Boolean(touched.direccion && errors.direccion)}
+              helperText={touched.direccion && errors.direccion}
+            />
           </Stack>
 
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
-              id="latitud"
-              label="latitud"
-              type="number"
+              id='latitud'
+              label='latitud'
+              type='number'
               {...getFieldProps('latitud')}
               error={Boolean(touched.latitud && errors.latitud)}
               helperText={touched.latitud && errors.latitud}
             />
             <TextField
-              id="longitud"
-              label="longitud"
-              type="number"
+              id='longitud'
+              label='longitud'
+              type='number'
               {...getFieldProps('longitud')}
               error={Boolean(touched.longitud && errors.longitud)}
               helperText={touched.longitud && errors.longitud}
             />
             <TextField
-              id="superficie"
-              label="superficie"
-              type="number"
+              id='superficie'
+              label='superficie'
+              type='number'
               {...getFieldProps('superficie')}
               error={Boolean(touched.superficie && errors.superficie)}
               helperText={touched.superficie && errors.superficie}
@@ -145,9 +146,9 @@ export default function NewObraForm() {
           </Stack>
 
           <TextField
-            id="descripcion"
-            label="Descripción"
-            autoComplete="descripcion"
+            id='descripcion'
+            label='Descripción'
+            autoComplete='descripcion'
             multiline
             rows={4}
             {...getFieldProps('descripcion')}
@@ -155,9 +156,9 @@ export default function NewObraForm() {
 
           <LoadingButton
             fullWidth
-            size="large"
-            type="submit"
-            variant="contained"
+            size='large'
+            type='submit'
+            variant='contained'
             loading={isSubmitting}
           >
             Crear
@@ -165,5 +166,5 @@ export default function NewObraForm() {
         </Stack>
       </Form>
     </FormikProvider>
-  )
+  );
 }
