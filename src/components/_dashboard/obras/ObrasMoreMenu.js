@@ -16,8 +16,7 @@ import {
 
 // ----------------------------------------------------------------------
 
-export default function UserMoreMenu({ idCliente }) {
-  const navigate = useNavigate();
+export default function ObrasMoreMenu({ idObra }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -42,18 +41,18 @@ export default function UserMoreMenu({ idCliente }) {
           onClick={() => {
             axios
               .delete(
-                `http://localhost:8765/dan-ms-usuarios/api/cliente/delete-by-id/${idCliente}`
+                `http://localhost:8765/dan-ms-usuarios/api/obra/${idObra}`
               )
               .then((response) => {
                 if (response.data !== null) {
-                  alert("Se elimino el cliente exitosamente.");
+                  alert("Se elimino la obra exitosamente.");
                   window.location.reload();
                 } else {
-                  alert("Hubo un error al borrar el cliente.");
+                  alert("Hubo un error al borrar la obra.");
                 }
               })
               .catch((error) => {
-                alert(`No se encontró al cliente indicado.`);
+                alert(`No se encontró la obra indicada.`);
               });
           }}
         >

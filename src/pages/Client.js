@@ -33,7 +33,7 @@ const TABLE_HEAD = [
   { id: 'mail', label: 'Email', alignRight: false },
   { id: 'cuit', label: 'CUIT', alignRight: false },
   { id: 'razonSocial', label: 'Razón Social', alignRight: false },
-  { id: 'cantObras', label: 'Cantidad de obras', alignRight: false }
+  { id: 'obras', label: 'Cantidad de obras', alignRight: false }
 ];
 
 // ----------------------------------------------------------------------
@@ -177,7 +177,7 @@ export default function Client() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, username, mail, cantObras, cuit, razonSocial } = row;
+                      const { id, username, mail, obras, cuit, razonSocial } = row;
                       const isItemSelected = selected.indexOf(username) !== -1;
 
                       return (
@@ -203,7 +203,7 @@ export default function Client() {
                           <TableCell align="left">{mail}</TableCell>
                           <TableCell align="left">{cuit}</TableCell>
                           <TableCell align="left">{razonSocial}</TableCell>
-                          <TableCell align="left">{cantObras}</TableCell>
+                          <TableCell align="left">{obras.length}</TableCell>
                           <TableCell align="right">
                             <UserMoreMenu idCliente={id} />
                           </TableCell>

@@ -22,6 +22,7 @@ import Page from '../components/Page';
 import Scrollbar from '../components/Scrollbar';
 import { UserListHead, UserMoreMenu } from '../components/_dashboard/user';
 import ObrasNotFound from '../components/NoObras';
+import ObrasMoreMenu from '../components/_dashboard/obras/ObrasMoreMenu';
 
 const TABLE_HEAD = [
   { id: 'id', label: 'Id', alignRight: false },
@@ -162,7 +163,6 @@ export default function Obras() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       const { id, tipo, direccion, clienteId, superficie } = row;
-                      const avatarUrl = `/static/mock-images/products/product_${Math.floor(Math.random() * 24) + 1}.jpg`;
                       const isItemSelected = selected.indexOf(id) !== -1;
 
                       return (
@@ -180,13 +180,10 @@ export default function Obras() {
                               onChange={(event) => handleClick(event, id)}
                             />
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={id} src={avatarUrl} />
-                              <Typography variant="subtitle2" noWrap>
-                                {id}
-                              </Typography>
-                            </Stack>
+                          <TableCell component="th" scope="row" padding="none" align="center">
+                            <Typography variant="subtitle2" align="center" noWrap>
+                              {id}
+                            </Typography>
                           </TableCell>
                           <TableCell align="left">{tipo}</TableCell>
                           <TableCell align="left">{direccion}</TableCell>
@@ -194,7 +191,7 @@ export default function Obras() {
                           <TableCell align="left">{superficie}</TableCell>
 
                           <TableCell align="right">
-                            <UserMoreMenu />
+                            <ObrasMoreMenu idObra={id} />
                           </TableCell>
                         </TableRow>
                       );

@@ -3,8 +3,6 @@ import axios from "axios";
 import { React, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useFormik, Form, FormikProvider } from "formik";
-import eyeFill from "@iconify/icons-eva/eye-fill";
-import eyeOffFill from "@iconify/icons-eva/eye-off-fill";
 import { useNavigate } from "react-router-dom";
 // material
 import { Stack, TextField, MenuItem } from '@mui/material';
@@ -62,8 +60,9 @@ export default function NewProductForm() {
     },
     validationSchema: RegisterSchema,
     onSubmit: (values) => {
+      console.log("en submit");
       axios
-        .post("http://localhost:8765/dan-ms-usuarios/api/productos", {
+        .post("http://localhost:8765/dan-ms-productos/api/productos", {
           id: 55,
           nombre: values.name,
           descripcion: values.description,
@@ -90,7 +89,7 @@ export default function NewProductForm() {
     },
   });
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  const { handleSubmit, isSubmitting, getFieldProps } = formik;
 
   return (
     <FormikProvider value={formik}>
@@ -101,8 +100,6 @@ export default function NewProductForm() {
               fullWidth
               label="Nombre"
               {...getFieldProps("name")}
-              error={Boolean(touched.name && errors.name)}
-              helperText={touched.name && errors.name}
             />
             <TextField
               id="tipo"
@@ -125,15 +122,12 @@ export default function NewProductForm() {
             rows={4}
             label="Descripción"
             {...getFieldProps("description")}
-            helperText={touched.name}
           />
 
           <TextField
             fullWidth
             label="Precio"
             {...getFieldProps("price")}
-            error={Boolean(touched.price && errors.price)}
-            helperText={touched.price && errors.price}
           />
 
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
@@ -141,16 +135,12 @@ export default function NewProductForm() {
               fullWidth
               label="Stock Actual"
               {...getFieldProps("currentStock")}
-              error={Boolean(touched.currentStock && errors.currentStock)}
-              helperText={touched.currentStock && errors.currentStock}
             />
 
             <TextField
               fullWidth
               label="Stock Mínimo"
               {...getFieldProps("minStock")}
-              error={Boolean(touched.minStock && errors.minStock)}
-              helperText={touched.minStock && errors.minStock}
             />
           </Stack>
 

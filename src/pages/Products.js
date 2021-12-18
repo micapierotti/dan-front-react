@@ -16,11 +16,12 @@ import { mockImgProduct } from '../utils/mockImages';
 import PRODUCTS from '../_mocks_/products';
 
 // ----------------------------------------------------------------------
-const PRODUCTS_REST_URL = "http://localhost:8765/dan-ms-usuarios/api/productos";
+const PRODUCTS_REST_URL = "http://localhost:8765/dan-ms-productos/api/productos";
 
-export default function EcommerceShop() {
+export default function Products() {
   const [openFilter, setOpenFilter] = useState(false);
-  const [productos, setProductos] = useState(null);
+  const [productos, setProductos] = useState([]);
+  const [listaVacia, setListaVacia] = useState(true);
 
   const formik = useFormik({
     initialValues: {
@@ -45,6 +46,10 @@ export default function EcommerceShop() {
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setListaVacia(productos.length === 0);
+  }, [productos]);
 
   if (!productos) return null;
 
@@ -94,6 +99,11 @@ export default function EcommerceShop() {
           })
         }
         />
+        {listaVacia && (
+          <Typography gutterBottom align="center" variant="subtitle1">
+            Todavía no se han agregado productos
+          </Typography>
+        )}
       </Container>
     </Page>
   );
