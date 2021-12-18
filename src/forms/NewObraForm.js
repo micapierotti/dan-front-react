@@ -55,7 +55,7 @@ export default function NewObraForm() {
     },
     validationSchema: RegisterSchema,
     onSubmit: (values) => {
-      axios.post('http://localhost:9000/api/obra', {
+      axios.post('http://localhost:8765/dan-ms-usuarios/api/obra', {
         descripcion: values.descripcion,
         latitud: values.latitud,
         longitud: values.longitud,

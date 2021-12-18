@@ -16,7 +16,7 @@ import { mockImgProduct } from '../utils/mockImages';
 import PRODUCTS from '../_mocks_/products';
 
 // ----------------------------------------------------------------------
-const PRODUCTS_REST_URL = "http://localhost:9001/api/productos";
+const PRODUCTS_REST_URL = "http://localhost:8765/dan-ms-usuarios/api/productos";
 
 export default function EcommerceShop() {
   const [openFilter, setOpenFilter] = useState(false);

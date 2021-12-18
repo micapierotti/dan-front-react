@@ -78,7 +78,7 @@ export default function Client() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await axios.get('http://localhost:9000/api/cliente');
+      const response = await axios.get('http://localhost:8765/dan-ms-usuarios/api/cliente');
       setUSERLIST(response.data);
       console.log(response.data);
     }

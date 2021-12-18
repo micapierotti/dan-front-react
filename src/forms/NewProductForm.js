@@ -63,7 +63,7 @@ export default function NewProductForm() {
     validationSchema: RegisterSchema,
     onSubmit: (values) => {
       axios
-        .post("http://localhost:9001/api/productos", {
+        .post("http://localhost:8765/dan-ms-usuarios/api/productos", {
           id: 55,
           nombre: values.name,
           descripcion: values.description,

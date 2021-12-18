@@ -31,7 +31,7 @@ export default function NewClientForm() {
         },
         validationSchema: RegisterSchema,
         onSubmit: (values) => {
-          axios.post('http://localhost:9000/api/cliente', {
+          axios.post('http://localhost:8765/dan-ms-usuarios/api/cliente', {
             razonSocial: values.razonSocial,
             cuit: values.cuit,
             mail: values.email,

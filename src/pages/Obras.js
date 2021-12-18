@@ -71,7 +71,7 @@ export default function Obras() {
 
   useEffect(() => {
       async function fetchData() {
-        const response = await axios.get('http://localhost:9000/api/obra');
+        const response = await axios.get('http://localhost:8765/dan-ms-usuarios/api/obra');
         setOBRASLIST(response.data);
         console.log(response.data);
       }
