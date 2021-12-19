@@ -101,7 +101,7 @@ export default function Products() {
         />
         {listaVacia && (
           <Typography gutterBottom align="center" variant="subtitle1">
-            Todavía no se han agregado productos
+            Todavía no se han agregado productos.
           </Typography>
         )}
       </Container>

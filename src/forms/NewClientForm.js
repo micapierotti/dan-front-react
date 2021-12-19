@@ -45,9 +45,11 @@ export default function NewClientForm() {
               navigate('/dashboard/client', { replace: true });
             } else {
               alert('Hubo un error al crear el cliente.');
+              window.location.reload();
             }
           }).catch((error) => {
             alert(`Ha ocurrido un error.`);
+            window.location.reload();
           });
         }
       });

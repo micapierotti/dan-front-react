@@ -77,10 +77,12 @@ export default function NewProductForm() {
             navigate("/dashboard/products", { replace: true });
           } else {
             alert("Hubo un error al crear la obra.");
+            window.location.reload();
           }
         })
         .catch((error) => {
           alert(`Ha ocurrido un error.`);
+          window.location.reload();
           console.log(error);
         });
       console.log("values", values);

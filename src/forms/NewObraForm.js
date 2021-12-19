@@ -69,9 +69,11 @@ export default function NewObraForm() {
           navigate('/dashboard/obras', { replace: true });
         } else {
           alert('Hubo un error al crear la obra.');
+          window.location.reload();
         }
       }).catch((error) => {
         alert(`No se encontró al cliente indicado.`);
+        window.location.reload();
       });
     }
   });

@@ -48,10 +48,12 @@ export default function NewClientForm() {
             navigate("/dashboard/employee", { replace: true });
           } else {
             alert("Hubo un error al crear el empleado.");
+            window.location.reload();
           }
         })
         .catch((error) => {
           alert(`Ha ocurrido un error.`);
+          window.location.reload();
         });
     },
   });
