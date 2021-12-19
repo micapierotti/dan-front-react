@@ -35,8 +35,8 @@ import {
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: "username", label: "Usuario", alignRight: false },
   { id: "name", label: "Nombre", alignRight: false },
+  { id: "username", label: "Usuario", alignRight: false },
   { id: "mail", label: "Email", alignRight: false },
 ];
 
@@ -79,7 +79,7 @@ export default function Employee() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState("username");
+  const [orderBy, setOrderBy] = useState("name");
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [USERLIST, setUSERLIST] = useState([]);
@@ -104,7 +104,7 @@ export default function Employee() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.username);
+      const newSelecteds = USERLIST.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -217,10 +217,10 @@ export default function Employee() {
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Typography variant="subtitle2" noWrap>
-                              {user.user}
+                              {nombre}
                             </Typography>
                           </TableCell>
-                          <TableCell align="left">{nombre}</TableCell>
+                          <TableCell align="left">{user.user}</TableCell>
                           <TableCell align="left">{mail}</TableCell>
                           <TableCell align="right">
                             <EmployeeMoreMenu idEmpleado={id} />
