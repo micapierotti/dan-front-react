@@ -20,15 +20,18 @@ import {
   TablePagination,
 } from "@mui/material";
 // components
+import EmployeeMoreMenu from "../components/_dashboard/employee/EmployeeMoreMenu";
+import EmployeeListToolbar from "../components/_dashboard/employee/EmployeeListToolbar";
 import Page from "../components/Page";
 import Label from "../components/Label";
 import Scrollbar from "../components/Scrollbar";
-import SearchNotFound from "../components/SearchNotFound";
+import NoEmpleados from "../components/NoEmpleados";
 import {
   UserListHead,
   UserMoreMenu,
   UserListToolbar
 } from "../components/_dashboard/user";
+
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -66,7 +69,7 @@ function applySortFilter(array, comparator, query) {
     return filter(
       array,
       (_user) =>
-        _user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        _user.nombre.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map((el) => el[0]);
@@ -172,7 +175,7 @@ export default function Employee() {
         </Stack>
 
         <Card>
-          <UserListToolbar
+          <EmployeeListToolbar
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -194,8 +197,8 @@ export default function Employee() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, username, name, mail } = row;
-                      const isItemSelected = selected.indexOf(username) !== -1;
+                      const { id, nombre, mail, user } = row;
+                      const isItemSelected = selected.indexOf(user.user) !== -1;
 
                       return (
                         <TableRow
@@ -209,19 +212,18 @@ export default function Employee() {
                           <TableCell padding="checkbox">
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, username)}
+                              onChange={(event) => handleClick(event, user)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Typography variant="subtitle2" noWrap>
-                              {username}
+                              {user.user}
                             </Typography>
                           </TableCell>
-                          <TableCell align="left">{username}</TableCell>
-                          <TableCell align="left">{name}</TableCell>
+                          <TableCell align="left">{nombre}</TableCell>
                           <TableCell align="left">{mail}</TableCell>
                           <TableCell align="right">
-                            <UserMoreMenu idEmpleado={id} />
+                            <EmployeeMoreMenu idEmpleado={id} />
                           </TableCell>
                         </TableRow>
                       );
@@ -236,7 +238,7 @@ export default function Employee() {
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
+                        <NoEmpleados searchQuery={filterName} />
                       </TableCell>
                     </TableRow>
                   </TableBody>
