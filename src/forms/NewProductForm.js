@@ -45,8 +45,7 @@ export default function NewProductForm() {
       .required("Nombre es obligatorio"),
     price: Yup.number().required("Precio es obligatorio"),
     currentStock: Yup.number().required("Stock actual es obligatorio"),
-    minStock: Yup.number().required("Stock mínimo es obligatorio"),
-    unit: Yup.string().required("Unidad es obligatoria"),
+    minStock: Yup.number().required("Stock mínimo es obligatorio")
   });
 
   const formik = useFormik({
@@ -63,7 +62,6 @@ export default function NewProductForm() {
       console.log("en submit");
       axios
         .post("http://localhost:8765/dan-ms-productos/api/productos", {
-          id: 55,
           nombre: values.name,
           descripcion: values.description,
           precio: values.price,
