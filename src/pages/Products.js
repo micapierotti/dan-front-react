@@ -86,7 +86,7 @@ export default function Products() {
         </Stack>
         <ProductList products={
           productos.map((p, index) => {
-            const setIndex = index + 1;
+            const setIndex = Math.floor(Math.random() * (5 - 1)) + 1;
             return {
               id: p.id,
               cover: mockImgProduct(setIndex),

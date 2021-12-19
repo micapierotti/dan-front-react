@@ -68,7 +68,7 @@ export default function NewProductForm() {
           stockActual: values.currentStock,
           stockMinimo: values.minStock,
           unidad: {
-            descripcion: values.unit,
+            descripcion: tipoUnidad,
           },
         })
         .then((response) => {
