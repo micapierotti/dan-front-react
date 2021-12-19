@@ -38,7 +38,7 @@ export default function LoginForm() {
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
-      navigate('/dashboard/client', { replace: true });
+      navigate('/dashboard', { replace: true });
     }
   });
 
