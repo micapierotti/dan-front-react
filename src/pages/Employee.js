@@ -1,15 +1,14 @@
-import { filter } from 'lodash';
-import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
-import { useState } from 'react';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import { Link as RouterLink } from 'react-router-dom';
+import { filter } from "lodash";
+import axios from "axios";
+import { Icon } from "@iconify/react";
+import React, { useState, useEffect } from "react";
+import plusFill from "@iconify/icons-eva/plus-fill";
+import { Link as RouterLink } from "react-router-dom";
 // material
 import {
   Card,
   Table,
   Stack,
-  Avatar,
   Button,
   Checkbox,
   TableRow,
@@ -18,25 +17,24 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination
-} from '@mui/material';
+  TablePagination,
+} from "@mui/material";
 // components
-import Page from '../components/Page';
-import Label from '../components/Label';
-import Scrollbar from '../components/Scrollbar';
-import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dashboard/user';
-//
-import USERLIST from '../_mocks_/user';
-
+import Page from "../components/Page";
+import Label from "../components/Label";
+import Scrollbar from "../components/Scrollbar";
+import SearchNotFound from "../components/SearchNotFound";
+import {
+  UserListHead,
+  UserMoreMenu,
+  UserListToolbar
+} from "../components/_dashboard/user";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'username', label: 'Usuario', alignRight: false },
-  { id: 'email', label: 'Email', alignRight: false },
-  { id: 'cuit', label: 'CUIT', alignRight: false },
-  { id: 'razonSocial', label: 'Razón Social', alignRight: false },
-  { id: 'cantObras', label: 'Cantidad de obras', alignRight: false }
+  { id: "username", label: "Usuario", alignRight: false },
+  { id: "name", label: "Nombre", alignRight: false },
+  { id: "mail", label: "Email", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -52,7 +50,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -65,28 +63,45 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(
+      array,
+      (_user) =>
+        _user.username.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
 export default function Employee() {
   const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
+  const [order, setOrder] = useState("asc");
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('username');
-  const [filterName, setFilterName] = useState('');
+  const [orderBy, setOrderBy] = useState("username");
+  const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [USERLIST, setUSERLIST] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get(
+        "http://localhost:8765/dan-ms-usuarios/api/empleado"
+      );
+      setUSERLIST(response.data);
+      console.log(response.data);
+    }
+
+    fetchData();
+  }, []);
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = USERLIST.map((n) => n.username);
       setSelected(newSelecteds);
       return;
     }
@@ -124,23 +139,32 @@ export default function Employee() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(
+    USERLIST,
+    getComparator(order, orderBy),
+    filterName
+  );
 
   const isUserNotFound = filteredUsers.length === 0;
-
   return (
     <Page title="Empleados">
       <Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={5}
+        >
           <Typography variant="h4" gutterBottom>
             Empleados
           </Typography>
           <Button
             variant="contained"
             component={RouterLink}
-            to="#"
+            to="/dashboard/employee/new"
             startIcon={<Icon icon={plusFill} />}
           >
             Nuevo empleado
@@ -170,7 +194,7 @@ export default function Employee() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, username, email, cantObras, cuit, razonSocial } = row;
+                      const { id, username, name, mail } = row;
                       const isItemSelected = selected.indexOf(username) !== -1;
 
                       return (
@@ -193,13 +217,11 @@ export default function Employee() {
                               {username}
                             </Typography>
                           </TableCell>
-                          <TableCell align="left">{email}</TableCell>
-                          <TableCell align="left">{cuit}</TableCell>
-                          <TableCell align="left">{razonSocial}</TableCell>
-                          <TableCell align="left">{cantObras}</TableCell>
-
+                          <TableCell align="left">{username}</TableCell>
+                          <TableCell align="left">{name}</TableCell>
+                          <TableCell align="left">{mail}</TableCell>
                           <TableCell align="right">
-                            <UserMoreMenu />
+                            <UserMoreMenu idEmpleado={id} />
                           </TableCell>
                         </TableRow>
                       );

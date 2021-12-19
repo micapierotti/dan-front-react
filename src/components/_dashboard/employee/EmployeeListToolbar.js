@@ -39,13 +39,13 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-EmployeeListToolBar.propTypes = {
+EmployeeListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func
 };
 
-export default function EmployeeListToolBar({ numSelected, filterName, onFilterName }) {
+export default function EmployeeListToolbar({ numSelected, filterName, onFilterName }) {
   return (
     <RootStyle
       sx={{
@@ -63,7 +63,7 @@ export default function EmployeeListToolBar({ numSelected, filterName, onFilterN
         <SearchStyle
           value={filterName}
           onChange={onFilterName}
-          placeholder="Buscar Cliente..."
+          placeholder="Buscar empleado..."
           startAdornment={
             <InputAdornment position="start">
               <Box component={Icon} icon={searchFill} sx={{ color: 'text.disabled' }} />

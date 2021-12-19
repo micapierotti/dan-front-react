@@ -17,6 +17,11 @@ const sidebarConfig = [
     icon: getIcon(peopleOutline)
   },
   {
+    title: 'Empleados',
+    path: '/dashboard/employee',
+    icon: getIcon(peopleFill)
+  },
+  {
     title: 'Productos',
     path: '/dashboard/products',
     icon: getIcon(shoppingBagFill)
