@@ -13,6 +13,7 @@ import Client from './pages/Client';
 import NewClient from './pages/NewClient';
 import NotFound from './pages/Page404';
 import Employee from './pages/Employee';
+import NewEmployee from './pages/NewEmployee';
 import Obras from './pages/Obras';
 import NuevaObra from './pages/NuevaObra';
 
@@ -29,6 +30,7 @@ export default function Router() {
         { path: 'client', element: <Client /> },
         { path: 'client/new', element: <NewClient /> },
         { path: 'employee', element: <Employee /> },
+        { path: 'employee/new', element: <NewEmployee /> },
         { path: 'obras', element: <Obras /> },
         { path: '/dashboard/obras/nuevaObra', element: <NuevaObra /> },
         { path: 'products', element: <Products /> },
