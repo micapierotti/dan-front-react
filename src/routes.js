@@ -22,6 +22,18 @@ import NuevaObra from './pages/NuevaObra';
 export default function Router() {
   return useRoutes([
     {
+      path: '/',
+      element: <LogoOnlyLayout />,
+      children: [
+        { element: <Navigate to="/login" replace /> },
+        { path: 'login', element: <Login /> },
+        { path: 'register', element: <Register /> },
+        { path: '404', element: <NotFound /> },
+        { path: '/', element: <Navigate to="/dashboard" /> },
+        { path: '*', element: <Navigate to="/404" /> }
+      ]
+    },
+    {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
@@ -36,17 +48,6 @@ export default function Router() {
         { path: 'products', element: <Products /> },
         { path: 'products/new', element: <NewProduct /> },
         { path: 'blog', element: <Blog /> }
-      ]
-    },
-    {
-      path: '/',
-      element: <LogoOnlyLayout />,
-      children: [
-        { path: 'login', element: <Login /> },
-        { path: 'register', element: <Register /> },
-        { path: '404', element: <NotFound /> },
-        { path: '/', element: <Navigate to="/dashboard" /> },
-        { path: '*', element: <Navigate to="/404" /> }
       ]
     },
     { path: '*', element: <Navigate to="/404" replace /> }
